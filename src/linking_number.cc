@@ -454,6 +454,7 @@ namespace LK {
     S.P1[0] = x ;
     S.P1[1] = y ;
     S.P1[2] = z ;
+    curves[ncurve].clear() ;
     curves[ncurve].push_back( S ) ;
   }
 
