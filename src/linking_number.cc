@@ -209,7 +209,22 @@ namespace LK {
     if ( (y1 >= 0 && y2 >= 0) || (y1 <= 0 && y2 <= 0) ) {
       LK_ASSERT( x1 > u_epsi_x && x2 > u_epsi_x,
                  "Angle::build, ambiguos angle\nx1 = " << x1 <<
-                 "\nx2 = " << x2 << "\ny1=y2=0 (probable intersection)" ) ;
+                 "\nx2 = " << x2 <<
+                 "\ny1 = " << y1 <<
+                 "\ny2 = " << y2 <<
+                 " (probable intersection)" <<
+                 "\nP1 = " << P1[0] << " " << P1[1] << " " << P1[2] <<
+                 "\nP2 = " << P2[0] << " " << P2[1] << " " << P2[2] <<
+                 "\nQ1 = " << Q1[0] << " " << Q1[1] << " " << Q1[2] <<
+                 "\nQ2 = " << Q2[0] << " " << Q2[1] << " " << Q2[2] <<
+                 "\nalpha = " << alpha[0] << " " << alpha[1] << " " << alpha[2] <<
+                 "\nbeta  = " << beta [0] << " " << beta [1] << " " << beta [2] <<
+                 "\ngamma = " << gamma[0] << " " << gamma[1] << " " << gamma[2] <<
+                 "\nomega = " << omega[0] << " " << omega[1] << " " << omega[2] <<
+                 "\nt1    = " << t1[0] << " " << t1[1] << " " << t1[2] <<
+                 "\nt2    = " << t2[0] << " " << t2[1] << " " << t2[2] <<
+                 "\ntmp   = " << tmp
+                 ) ;
       x     = 1 ; // x1*x2 ;
       y     = 0 ;
       s     = ( y > 0 || (y == 0 && x < 0)) ? 1 : -1 ; // s(x,y)
@@ -328,7 +343,7 @@ namespace LK {
 
     // va riscalato per evitare overflow
     scale(nx,ny) ;
-      
+
     real_type E = real_type(2.829+rhs.e+R) ;
     I += static_cast<unsigned long>(std::floor(E)) ;
     R = E-std::floor(E) ;
@@ -373,7 +388,7 @@ namespace LK {
   template <typename T>
   void
   BigAngle<T>::checkSigma() const {
-    real_type m_pi  = 3.1415926535897932384626433832795028841971693993751 ;
+    static real_type const m_pi = 3.1415926535897932384626433832795028841971693993751 ;
     real_type angle = atan2( Y, X ) ;
     real_type err   = getError() ;
     LK_ASSERT( std::abs(angle) <= err*m_pi/2,
@@ -386,14 +401,14 @@ namespace LK {
   template <typename T>
   typename BigAngle<T>::real_type
   BigAngle<T>::getAngle() const {
-    real_type m_pi  = 3.1415926535897932384626433832795028841971693993751 ;
+    static real_type const m_pi = 3.1415926535897932384626433832795028841971693993751 ;
     return atan2( Y, X )+2*SIGMA*m_pi ;
   }
 
   template <typename T>
   typename BigAngle<T>::real_type
   BigAngle<T>::getFraction() const {
-    real_type m_pi  = 3.1415926535897932384626433832795028841971693993751 ;
+    static real_type const m_pi = 3.1415926535897932384626433832795028841971693993751 ;
     return atan2( Y, X )/(2*m_pi)+SIGMA ;
   }
 
@@ -590,10 +605,26 @@ namespace LK {
   // ------------------------------------------------------------------------
 
   template <typename T>
+  int
+  LinkingNumber<T>::eval( unsigned i_curve, unsigned j_curve ) const {
+    int       lk ;
+    real_type fraction ;
+    evaluate( i_curve, j_curve, lk, fraction ) ;
+    LK_ASSERT( std::abs(fraction) < 0.5, "eval(...)\nerr = " << fraction ) ;
+    return lk ;
+  }
+
+  // ------------------------------------------------------------------------
+
+  template <typename T>
   void
   LinkingNumber<T>::evaluate( unsigned i_curve,
                               unsigned j_curve,
-                              int    & lk ) const {
+                              int    & lk,
+                              T      & fraction ) const {
+
+    static real_type const m_pi = 3.1415926535897932384626433832795028841971693993751 ;
+
     LK_ASSERT( i_curve < curves.size() && j_curve < curves.size(),
                "LinkingNumber::eval( " << i_curve << ", " << j_curve << ")\n" <<
                "arguments must be in [0," << curves.size()-1 << "]" ) ;
@@ -607,8 +638,8 @@ namespace LK {
     eval_rows( 0, 1, Ci, Cj, total_angle ) ;
 
     ++_lk_computed ;
-    total_angle.checkSigma() ;
-    lk = total_angle.getSigma() ;
+    fraction = total_angle.getError() / (2*m_pi) ;
+    lk       = total_angle.getSigma() ;
   }
 
   #ifdef LINKING_NUMBER_USE_CXX11
@@ -666,7 +697,8 @@ namespace LK {
       for ( unsigned j = 0 ; j < nj ; ++j ) {
         unsigned const jj = j_curve[j] ;
         int & mij = mat[i+j*ni];
-        vec_thread[j] = std::thread( &LinkingNumber<T>::evaluate, this, ii, jj, std::ref(mij) )  ;
+        real_type fraction ;
+        vec_thread[j] = std::thread( &LinkingNumber<T>::evaluate, this, ii, jj, std::ref(mij), std::ref(fraction) )  ;
       }
       for ( unsigned j = 0 ; j < nj ; ++j )
         vec_thread[j].join() ;
@@ -735,7 +767,7 @@ namespace LK {
 
   template <typename T>
   typename LinkingNumber<T>::real_type
-  LinkingNumber<T>::writhe( unsigned i_curve ) const {
+  LinkingNumber<T>::writhe( unsigned i_curve, real_type & err ) const {
     LK_ASSERT( i_curve < curves.size(),
                "LinkingNumber::writhe( " << i_curve << ")\n" <<
                "arguments must be in [0," << curves.size()-1 << "]" ) ;
@@ -747,6 +779,7 @@ namespace LK {
     BigAngle<T> total_angle;
     writhe_rows( 0, 1, C, total_angle ) ;
 
+    err = total_angle.getError() ;
     return total_angle.getFraction();
   }
 

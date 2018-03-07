@@ -49,28 +49,29 @@ main() {
   c2.push_back(q2);
   c2.push_back(q3);
 
+  LK_class::real_type err ;
+
   cout << "lk = " << lk.eval( c1, c2 ) << '\n' ;
-  cout << "wh(0) = " << lk.writhe( 0 ) << '\n' ;
-  cout << "wh(1) = " << lk.writhe( 1 ) << '\n' ;
+  cout << "wh(0) = " << lk.writhe( 0, err ) << '\n' ;
+  cout << "wh(1) = " << lk.writhe( 1, err  ) << '\n' ;
 
   int ncurve = 2 ;
 
-  #if 0
-  lk.init_curve( ncurve, -1.0, -1.0, 0.0 ) ;
-  lk.add_point( ncurve, 1.0, 0.0, 0.0 ) ;
-  lk.add_point( ncurve, 0.0, 0.0, 1.0 ) ;
-  lk.add_point( ncurve, 0.0, 0.0,-1.0 ) ;
-  lk.add_point( ncurve, 0.0, 1.0, 0.0 ) ;
-  lk.close_curve( ncurve ) ;
-  #else
   lk.init_curve( ncurve, 0.0, 1.0, 0.0 ) ;
   lk.add_point( ncurve, 0.0, 0.0,-1.0 ) ;
   lk.add_point( ncurve, 0.0, 0.0, 1.0 ) ;
   lk.add_point( ncurve, 1.0, 0.0, 0.0 ) ;
   lk.add_point( ncurve, -1.0, -1.0, 0.0 ) ;
   lk.close_curve( ncurve ) ;
-  #endif
-  cout << "wh(2) = " << lk.writhe( 2 ) << '\n' ;
+  cout << "wh(2) = " << lk.writhe( 2, err ) << '\n' ;
+
+  lk.init_curve( ncurve, 0.0, 1.1, 0.0 ) ;
+  lk.add_point( ncurve, 0.0, 0.0,-1.0 ) ;
+  lk.add_point( ncurve, 0.0, 0.0, 1.0 ) ;
+  lk.add_point( ncurve, 1.0, 0.0, 0.0 ) ;
+  lk.add_point( ncurve, -1.0, -1.0, 0.0 ) ;
+  lk.close_curve( ncurve ) ;
+  cout << "wh(2) = " << lk.writhe( 2, err ) << '\n' ;
 
 
   return 0 ;

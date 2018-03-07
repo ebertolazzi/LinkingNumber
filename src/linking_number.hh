@@ -138,7 +138,7 @@ namespace LK {
 
   public:
 
-    Angle() : x(0), y(0), e(0), sigma(0), s(0) {}
+    Angle() : x(0), y(0), e(0), s(0), sigma(0) {}
 
     Angle( Angle const & rhs ) { *this = rhs ; }
 
@@ -362,14 +362,10 @@ namespace LK {
     add_curve( unsigned i_curve, real_type const a[][3], unsigned a_size ) ;
 
     void
-    evaluate( unsigned i_curve, unsigned j_curve, int & ret ) const ;
+    evaluate( unsigned i_curve, unsigned j_curve, int & ret, T & fraction ) const ;
 
     int
-    eval( unsigned i_curve, unsigned j_curve ) const {
-      int lk ;
-      evaluate( i_curve, j_curve, lk ) ;
-      return lk ;
-    }
+    eval( unsigned i_curve, unsigned j_curve ) const ;
 
     template <typename Tvec>
     int
@@ -378,9 +374,7 @@ namespace LK {
       if ( curves.size() < 2 ) setup( 2 ) ;
       add_curve( 0, a ) ;
       add_curve( 1, b ) ;
-      int lk ;
-      evaluate( 0, 1, lk ) ;
-      return lk ;
+      return eval( 0, 1 ) ;
     }
 
     template <typename Type>
@@ -423,15 +417,15 @@ namespace LK {
     unsigned lk_computed() const { return _lk_computed ; }
 
     real_type
-    writhe( unsigned i_curve ) const ;
+    writhe( unsigned i_curve, real_type & err ) const ;
 
     #ifdef LINKING_NUMBER_USE_CXX11
     real_type
-    writhe_mt( unsigned i_curve ) const ;
+    writhe_mt( unsigned i_curve, real_type & err ) const ;
     #else
     real_type
-    writhe_mt( unsigned i_curve ) const
-    { return writhe( i_curve ) ; }
+    writhe_mt( unsigned i_curve, real_type & err ) const
+    { return writhe( i_curve, err ) ; }
     #endif
 
   } ;
