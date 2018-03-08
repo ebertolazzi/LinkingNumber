@@ -1,7 +1,7 @@
 clc;
 clear functions;
 
-NAMES = { 'lk' } ;
+NAMES = { 'lk', 'Writhe' } ;
 
 LIBS = [ ...
   '-I../src ' ...

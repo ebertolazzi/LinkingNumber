@@ -17,7 +17,7 @@
 "lk: Compute Linking number for n polygonal curves\n" \
 "\n" \
 "USAGE:\n" \
-"  [L,err] = lk(p1,p2,...,pn) ;\n" \
+"  [W,err] = writhe(p1,p2,...,pn) ;\n" \
 "\n" \
 "On input:\n" \
 "\n" \
@@ -25,10 +25,10 @@
 "\n" \
 "On output:\n" \
 "\n" \
-"  L        = Linking number matrix\n" \
-"  L(i,j)   = Linking number of curve i vs curve j, L(i,i) = 0\n" \
-"  err      = linking number error matrix\n" \
-"  err(i,j) = L(i,j) error, if |err(i,j)| < 0.5 the L(i,j) is certified\n" \
+"  W      = Writhe number vector\n" \
+"  W(i)   = Writhe number of curve i\n" \
+"  err    = Writhe number error vector\n" \
+"  err(i) = W(i) error\n" \
 "\n" \
 "======================================================================\n" \
 "\n" \
@@ -52,10 +52,10 @@ namespace LK {
 
     try {
 
-      MEX_ASSERT( nlhs == 2, "lk(...), expected 2 output, found " << nlhs ) ;
+      MEX_ASSERT( nlhs == 2, "Writhe(...), expected 2 output, found " << nlhs ) ;
 
       // check for proper number of arguments
-      if ( nrhs > 1 ) {
+      if ( nrhs > 0 ) {
 
         LinkingNumber<double> lk(nrhs) ;
 
@@ -65,17 +65,17 @@ namespace LK {
 
           mwSize number_of_dimensions = mxGetNumberOfDimensions(rhs) ;
 
-          MEX_ASSERT( number_of_dimensions == 2, "lk(p1,...,pn), p" << ncurve << " must be a matrix" ) ;
+          MEX_ASSERT( number_of_dimensions == 2, "Writhe(p1,...,pn), p" << ncurve << " must be a matrix" ) ;
           mwSize const * dims = mxGetDimensions(rhs) ;
 
           unsigned nr = dims[0] ;
           unsigned nc = dims[1] ;
 
           MEX_ASSERT( nc > 2 && nr == 3,
-                      "lk(p1,...,pn), p" << ncurve << " expected to be an (3 x n) matrix with n >= 3, found " <<
+                      "Writhe(p1,...,pn), p" << ncurve << " expected to be an (3 x n) matrix with n >= 3, found " <<
                       nr << " x " << nc ) ;
           MEX_ASSERT( mxIsDouble(rhs),
-                      "lk(p1,...,pn), p" << ncurve << " expected to be a matrix with real number" ) ;
+                      "Writhe(p1,...,pn), p" << ncurve << " expected to be a matrix with real number" ) ;
 
           double * p = mxGetPr(rhs) ;
 
@@ -87,22 +87,9 @@ namespace LK {
           lk.close_curve(ncurve) ;
         }
 
-        int64_t * imat = createMatrixInt( plhs[0], nrhs, nrhs ) ;
-        double  * rmat = createMatrixValue( plhs[1], nrhs, nrhs ) ;
-
-        for ( unsigned i = 0 ; i < nrhs ; ++i ) {
-          imat[i*(nrhs+1)] = 0 ;
-          rmat[i*(nrhs+1)] = 0 ;
-          for ( unsigned j = i+1 ; j < nrhs ; ++j ) {
-            int    lknum ;
-            double err;
-            lk.evaluate( i, j, lknum, err );
-            unsigned ij = i+j*nrhs ;
-            unsigned ji = j+i*nrhs ;
-            imat[ij] = imat[ji] = lknum ;
-            rmat[ij] = rmat[ji] = err ;
-          }
-        }
+        double * W = createMatrixValue( plhs[0], nrhs, nrhs ) ;
+        double * E = createMatrixValue( plhs[1], nrhs, nrhs ) ;
+        for ( unsigned i = 0 ; i < nrhs ; ++i ) W[i] = lk.writhe( i, E[i] );
 
       } else {
         MEX_ASSERT( false, MEX_ERROR_MESSAGE ) ;
@@ -112,7 +99,8 @@ namespace LK {
       mexErrMsgTxt(e.what()) ;
 
     } catch (...) {
-      mexErrMsgTxt("lk failed\n") ;
+      mexErrMsgTxt("Writhe failed\n") ;
     }
   }
 }
+

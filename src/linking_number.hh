@@ -362,7 +362,10 @@ namespace LK {
     add_curve( unsigned i_curve, real_type const a[][3], unsigned a_size ) ;
 
     void
-    evaluate( unsigned i_curve, unsigned j_curve, int & ret, T & fraction ) const ;
+    evaluate( unsigned i_curve,
+              unsigned j_curve,
+              int    & ret,
+              T      & fraction ) const ;
 
     int
     eval( unsigned i_curve, unsigned j_curve ) const ;

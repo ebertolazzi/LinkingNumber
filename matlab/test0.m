@@ -14,7 +14,7 @@ function test
   
   [L,E] = lk( P, Q ) ;
   
-  fprintf('L = %d, err = %g\n', L, E ) ;
+  fprintf('L = %d, err = %g\n', L(1,2), E(1,2) ) ;
 
 end
 

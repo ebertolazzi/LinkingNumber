@@ -19,10 +19,10 @@ P = [ x ; y ; z ] ;
 Q = [ x2; y2; z2 ] ;
 
 tic
-[L,E] = lk( P, Q );
+[L,E] = lk( P, Q )
 toc
 
-fprintf('L = %d, err = %g\n', L, E ) ;
+fprintf('L = %d, err = %g\n', L(1,2), E(1,2) ) ;
 
 if false
   boh1=[x;y;z]';
