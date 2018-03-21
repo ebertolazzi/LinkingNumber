@@ -96,6 +96,18 @@ getInt( mxArray const * arg, char const msg[] ) {
     case mxUINT32_CLASS: res = *static_cast<uint32_t*>(ptr); break;
     case mxINT64_CLASS:  res = *static_cast<int64_t*>(ptr);  break;
     case mxUINT64_CLASS: res = *static_cast<uint64_t*>(ptr); break;
+    case mxDOUBLE_CLASS:
+      { double tmp = *static_cast<double*>(ptr) ;
+        MEX_ASSERT( tmp == std::floor(tmp), msg << " expected int, found " << tmp ) ;
+        res = static_cast<int64_t>(tmp) ;
+      }
+      break ;
+    case mxSINGLE_CLASS:
+      { float tmp = *static_cast<float*>(ptr) ;
+        MEX_ASSERT( tmp == std::floor(tmp), msg << " expected int, found " << tmp ) ;
+        res = static_cast<int64_t>(tmp) ;
+      }
+      break ;
     default:
       MEX_ASSERT (false, msg << " bad type scalar" ) ;
     break;
@@ -114,6 +126,18 @@ getVectorPointer( mxArray const * arg, mwSize & sz, char const msg[] ) {
               msg << "\nExpect (1 x n or n x 1) matrix, found " <<
               dims[0] << " x " << dims[1] ) ;
   sz = dims[0]*dims[1] ;
+  return mxGetPr(arg) ;
+}
+
+static
+inline
+double const *
+getMatrixPointer( mxArray const * arg, mwSize & nr, mwSize & nc,  char const msg[] ) {
+  mwSize number_of_dimensions = mxGetNumberOfDimensions(arg) ;
+  MEX_ASSERT( number_of_dimensions == 2, msg ) ;
+  mwSize const * dims = mxGetDimensions(arg) ;
+  nr = dims[0] ;
+  nc = dims[1] ;
   return mxGetPr(arg) ;
 }
 
@@ -148,7 +172,7 @@ inline
 double *
 createMatrixValue( mxArray * & arg, mwSize nrow, mwSize ncol ) {
   arg = mxCreateNumericMatrix( nrow, ncol, mxDOUBLE_CLASS, mxREAL );
-  return static_cast<double*>(mxGetData(arg)) ;
+  return mxGetPr(arg) ;
 }
 
 // -----------------------------------------------------------------------------
