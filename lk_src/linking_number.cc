@@ -278,7 +278,7 @@ namespace LK {
     SIGMA += rhs.SIGMA ;
 
     // check sign if cross negative X axes
-    int ns = ( ny > 0 || (ny == 0 && nx < 0) ) ? 1 : -1 ;
+    int_type ns = ( ny > 0 || (ny == 0 && nx < 0) ) ? 1 : -1 ;
     if ( S*rhs.S > 0 && S*ns < 0 ) SIGMA -= ns ;
 
     // scale to avoid overflow
@@ -308,7 +308,7 @@ namespace LK {
     SIGMA -= rhs.SIGMA ;
 
     // check sign if cross negative X axes
-    int ns = ( ny > 0 || (ny == 0 && nx < 0) ) ? 1 : -1 ;
+    int_type ns = ( ny > 0 || (ny == 0 && nx < 0) ) ? 1 : -1 ;
     if ( S*rhs.S < 0 && S*ns < 0 ) SIGMA -= ns ;
 
     // scale to avoid overflow
@@ -338,7 +338,7 @@ namespace LK {
     SIGMA += rhs.sigma ;
 
     // controllo segno e attraversamento asse X negativo
-    int ns = ( ny > 0 || (ny == 0 && nx < 0)) ? 1 : -1 ;
+    int_type ns = ( ny > 0 || (ny == 0 && nx < 0)) ? 1 : -1 ;
     if ( S*rhs.s > 0 && S*ns < 0 ) SIGMA -= ns ;
 
     // va riscalato per evitare overflow
@@ -367,7 +367,7 @@ namespace LK {
     SIGMA -= rhs.sigma ;
 
     // controllo segno e attraversamento asse X negativo
-    int ns = ( ny > 0 || (ny == 0 && nx < 0)) ? 1 : -1 ;
+    int_type ns = ( ny > 0 || (ny == 0 && nx < 0)) ? 1 : -1 ;
     if ( S*rhs.s < 0 && S*ns < 0 ) SIGMA -= ns ;
 
     // va riscalato per evitare overflow
@@ -388,7 +388,7 @@ namespace LK {
   template <typename T>
   void
   BigAngle<T>::checkSigma() const {
-    static real_type const m_pi = 3.1415926535897932384626433832795028841971693993751 ;
+    static real_type const m_pi = real_type(3.1415926535897932384626433832795028841971693993751) ;
     real_type angle = atan2( Y, X ) ;
     real_type err   = getError() ;
     LK_ASSERT( std::abs(angle) <= err*m_pi/2,
@@ -401,14 +401,14 @@ namespace LK {
   template <typename T>
   typename BigAngle<T>::real_type
   BigAngle<T>::getAngle() const {
-    static real_type const m_pi = 3.1415926535897932384626433832795028841971693993751 ;
+    static real_type const m_pi = real_type(3.1415926535897932384626433832795028841971693993751) ;
     return atan2( Y, X )+2*SIGMA*m_pi ;
   }
 
   template <typename T>
   typename BigAngle<T>::real_type
   BigAngle<T>::getFraction() const {
-    static real_type const m_pi = 3.1415926535897932384626433832795028841971693993751 ;
+    static real_type const m_pi = real_type(3.1415926535897932384626433832795028841971693993751) ;
     return atan2( Y, X )/(2*m_pi)+SIGMA ;
   }
 
@@ -481,7 +481,7 @@ namespace LK {
                                real_type x,
                                real_type y,
                                real_type z,
-                               int       weight ) {
+                               int_type  weight ) {
 
     LK_ASSERT( ncurve < curves.size(),
                "LinkingNumber::add_point( " << ncurve <<
@@ -510,8 +510,8 @@ namespace LK {
 
   template <typename T>
   void
-  LinkingNumber<T>::close_curve( unsigned  ncurve,
-                                 int       weight ) {
+  LinkingNumber<T>::close_curve( unsigned ncurve,
+                                 int_type weight ) {
     LK_ASSERT( ncurve < curves.size(),
                "LinkingNumber::close_curve( " << ncurve <<
                "), argument must be in [0," << curves.size()-1 << "]" ) ;
@@ -535,7 +535,7 @@ namespace LK {
                                  real_type x2,
                                  real_type y2,
                                  real_type z2,
-                                 int       weight ) {
+                                 int_type  weight ) {
     LK_ASSERT( ncurve < curves.size(),
                "LinkingNumber::add_segment( " << ncurve <<
                "...), first argument must be in [0," << curves.size()-1 << "]" ) ;
@@ -572,7 +572,7 @@ namespace LK {
     out_angle.init();
     for ( typename CURVE::const_iterator iQ = curve.begin() ;
           iQ != curve.end() ; ++iQ ) {
-      int w = iQ->weight ;
+      int_type w = iQ->weight ;
       if ( w == 0 ) continue ;
       angle.build( P1, P2, iQ->P1, iQ->P2 ) ;
       for ( ; w > 0 ; --w ) out_angle += angle;
@@ -584,15 +584,15 @@ namespace LK {
 
   template <typename T>
   void
-  LinkingNumber<T>::eval_rows( int           istart,
-                               int           nstep,
+  LinkingNumber<T>::eval_rows( int_type      istart,
+                               int_type      nstep,
                                CURVE const & curveA,
                                CURVE const & curveB,
                                BigAngle<T> & out_angle ) const {
     out_angle.init() ;
-    for ( int i = istart ; i < curveA.size() ; i += nstep ) {
+    for ( int_type i = istart ; i < curveA.size() ; i += nstep ) {
       Segment const & S = curveA[i] ;
-      int w = S.weight ;
+      int_type w = S.weight ;
       if ( w != 0 ) {
         BigAngle<T> tmp_angle ;
         eval_row( S.P1, S.P2, curveB, tmp_angle );
@@ -607,7 +607,7 @@ namespace LK {
   template <typename T>
   int
   LinkingNumber<T>::eval( unsigned i_curve, unsigned j_curve ) const {
-    int       lk ;
+    int_type  lk ;
     real_type fraction ;
     evaluate( i_curve, j_curve, lk, fraction ) ;
     LK_ASSERT( std::abs(fraction) < 0.5, "eval(...)\nerr = " << fraction ) ;
@@ -618,12 +618,12 @@ namespace LK {
 
   template <typename T>
   void
-  LinkingNumber<T>::evaluate( unsigned i_curve,
-                              unsigned j_curve,
-                              int    & lk,
-                              T      & fraction ) const {
+  LinkingNumber<T>::evaluate( unsigned   i_curve,
+                              unsigned   j_curve,
+                              int_type & lk,
+                              T        & fraction ) const {
 
-    static real_type const m_pi = 3.1415926535897932384626433832795028841971693993751 ;
+    static real_type const m_pi = real_type(3.1415926535897932384626433832795028841971693993751) ;
 
     LK_ASSERT( i_curve < curves.size() && j_curve < curves.size(),
                "LinkingNumber::eval( " << i_curve << ", " << j_curve << ")\n" <<
@@ -647,7 +647,7 @@ namespace LK {
   // ------------------------------------------------------------------------
 
   template <typename T>
-  int
+  typename LinkingNumber<T>::int_type
   LinkingNumber<T>::eval_mt( unsigned i_curve, unsigned j_curve ) const {
 
     LK_ASSERT( i_curve < curves.size() && j_curve < curves.size(),
@@ -688,7 +688,7 @@ namespace LK {
   void
   LinkingNumber<T>::evals( unsigned const i_curve[], unsigned ni,
                            unsigned const j_curve[], unsigned nj,
-                           int mat[] ) {
+                           int_type mat[] ) {
     if ( ni == 0 || nj == 0 ) return ; // caso triviale
     // launch angle computation
     std::vector<std::thread> vec_thread(nj) ;
@@ -696,7 +696,7 @@ namespace LK {
       unsigned const ii = i_curve[i] ;
       for ( unsigned j = 0 ; j < nj ; ++j ) {
         unsigned const jj = j_curve[j] ;
-        int & mij = mat[i+j*ni];
+        int_type & mij = mat[i+j*ni];
         real_type fraction ;
         vec_thread[j] = std::thread( &LinkingNumber<T>::evaluate, this, ii, jj, std::ref(mij), std::ref(fraction) )  ;
       }
@@ -711,7 +711,7 @@ namespace LK {
   void
   LinkingNumber<T>::evals( unsigned const i_curve[], unsigned ni,
                            unsigned const j_curve[], unsigned nj,
-                           int mat[] ) {
+                           int_type mat[] ) {
     if ( ni == 0 || nj == 0 ) return ; // caso triviale
     for ( unsigned i = 0 ; i < ni ; ++i )
       for ( unsigned j = 0 ; j < nj ; ++j )
@@ -724,7 +724,7 @@ namespace LK {
 
   template <typename T>
   void
-  LinkingNumber<T>::writhe_row( int               i_skip,
+  LinkingNumber<T>::writhe_row( int_type          i_skip,
                                 real_type const   P1[3],
                                 real_type const   P2[3],
                                 CURVE     const & curve,
@@ -734,7 +734,7 @@ namespace LK {
     for ( typename CURVE::const_iterator iQ = curve.begin() ;
           iQ != curve.end() ; ++iQ ) {
       if ( std::abs( (iQ-curve.begin()) - i_skip ) < 2 ) continue ;
-      int w = iQ->weight ;
+      int_type w = iQ->weight ;
       if ( w == 0 ) continue ;
       angle.build( P1, P2, iQ->P1, iQ->P2 ) ;
       for ( ; w > 0 ; --w ) out_angle += angle;
@@ -746,14 +746,14 @@ namespace LK {
 
   template <typename T>
   void
-  LinkingNumber<T>::writhe_rows( int           istart,
-                                 int           nstep,
+  LinkingNumber<T>::writhe_rows( int_type      istart,
+                                 int_type      nstep,
                                  CURVE const & curve,
                                  BigAngle<T> & out_angle ) const {
     out_angle.init() ;
-    for ( int i = istart ; i < curve.size() ; i += nstep ) {
+    for ( int_type i = istart ; i < curve.size() ; i += nstep ) {
       Segment const & S = curve[i] ;
-      int w = S.weight ;
+      int_type w = S.weight ;
       if ( w != 0 ) {
         BigAngle<T> tmp_angle ;
         writhe_row( i, S.P1, S.P2, curve, tmp_angle );

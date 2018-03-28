@@ -127,14 +127,15 @@ namespace LK {
     using Constants<T>::I_max ;
 
   public:
-    typedef T real_type ;
+    typedef T   real_type ;
+    typedef int int_type ;
 
   private:
 
     real_type x, y ;  // vector angle
     real_type e ;     // floating point error
-    int       s ;     // sign quadrant
-    int       sigma ; // 2*pi turn numbers
+    int_type  s ;     // sign quadrant
+    int_type  sigma ; // 2*pi turn numbers
 
   public:
 
@@ -177,12 +178,13 @@ namespace LK {
     using Constants<T>::I_max ;
 
   public:
-    typedef T real_type ;
+    typedef T   real_type ;
+    typedef int int_type ;
 
   private:
     // angle part
     real_type     X, Y ;
-    int           SIGMA, S ;
+    int_type      SIGMA, S ;
     // error propagation
     unsigned long I ;
     real_type     R ;
@@ -215,7 +217,7 @@ namespace LK {
       R     = 0  ;
     }
 
-    real_type getSigma() const { return SIGMA ; }
+    int_type  getSigma() const { return SIGMA ; }
     real_type getError() const { return (I*u_epsi+R*u_epsi) ; }
     real_type getAngle() const ;
     real_type getFraction() const ;
@@ -252,7 +254,8 @@ namespace LK {
     using Constants<T>::I_max ;
 
   public:
-    typedef T real_type ;
+    typedef T   real_type ;
+    typedef int int_type ;
     typedef struct { real_type x, y, z ; } pnt3 ;
 
   private:
@@ -267,7 +270,7 @@ namespace LK {
     typedef struct {
       real_type P1[3];
       real_type P2[3];
-      int       weight;
+      int_type  weight;
     } Segment ;
 
     typedef std::vector<Segment> CURVE ;
@@ -280,21 +283,21 @@ namespace LK {
               BigAngle<T>     & out_angle ) const ;
 
     void
-    eval_rows( int           istart,
-               int           nstep,
+    eval_rows( int_type      istart,
+               int_type      nstep,
                CURVE const & curveA,
                CURVE const & curveB,
                BigAngle<T> & out_angle ) const ;
 
     void
-    writhe_row( int               i_skip,
+    writhe_row( int_type          i_skip,
                 real_type const   P1[3],
                 real_type const   P2[3],
                 CURVE     const & curve,
                 BigAngle<T>     & out_angle ) const ;
     void
-    writhe_rows( int           istart,
-                 int           nstep,
+    writhe_rows( int_type      istart,
+                 int_type      nstep,
                  CURVE const & curve,
                  BigAngle<T> & out_angle ) const ;
 
@@ -329,11 +332,11 @@ namespace LK {
                real_type x,
                real_type y,
                real_type z,
-               int       weight = 1 ) ;
+               int_type  weight = 1 ) ;
 
     //! close `ncurve` with weight `weight` for last segment
     void
-    close_curve( unsigned ncurve, int weight = 1 );
+    close_curve( unsigned ncurve, int_type weight = 1 );
 
     void
     add_segment( unsigned  ncurve,
@@ -343,7 +346,7 @@ namespace LK {
                  real_type x2,
                  real_type y2,
                  real_type z2,
-                 int       weight );
+                 int_type  weight );
 
     template <typename Tvec>
     void
@@ -351,9 +354,9 @@ namespace LK {
       reset( i_curve, unsigned(a.size()) ) ;
       if ( !a.empty() ) {
         typename std::vector<Tvec>::const_iterator ip = a.begin() ;
-        init_curve( i_curve, ip->x, ip->y, ip->z ) ;
+        init_curve( i_curve, (*ip)[0], (*ip)[1], (*ip)[2] ) ;
         for ( ++ip ; ip != a.end() ; ++ip )
-          add_point( i_curve, ip->x, ip->y, ip->z, 1 ) ;
+          add_point( i_curve, (*ip)[0], (*ip)[1], (*ip)[2], 1 ) ;
         close_curve( i_curve ) ;
       }
     }
@@ -362,16 +365,16 @@ namespace LK {
     add_curve( unsigned i_curve, real_type const a[][3], unsigned a_size ) ;
 
     void
-    evaluate( unsigned i_curve,
-              unsigned j_curve,
-              int    & ret,
-              T      & fraction ) const ;
+    evaluate( unsigned   i_curve,
+              unsigned   j_curve,
+              int_type & ret,
+              T        & fraction ) const ;
 
-    int
+    int_type
     eval( unsigned i_curve, unsigned j_curve ) const ;
 
     template <typename Tvec>
-    int
+    int_type
     eval( std::vector<Tvec> const & a,
           std::vector<Tvec> const & b ) {
       if ( curves.size() < 2 ) setup( 2 ) ;
@@ -381,7 +384,7 @@ namespace LK {
     }
 
     template <typename Type>
-    int
+    int_type
     eval( Type const a[], unsigned size_a,
           Type const b[], unsigned size_b ) {
       if ( curves.size() < 2 ) setup( 2 ) ;
@@ -393,13 +396,13 @@ namespace LK {
     void
     evals( unsigned const i_curve[], unsigned ni,
            unsigned const j_curve[], unsigned nj,
-           int mat[] ) ;
+           int_type mat[] ) ;
 
     #ifdef LINKING_NUMBER_USE_CXX11
-    int
+    int_type
     eval_mt( unsigned i_curve, unsigned j_curve ) const ;
     #else
-    int
+    int_type
     eval_mt( unsigned i_curve, unsigned j_curve ) const
     { return eval( i_curve, j_curve ) ; }
     #endif
