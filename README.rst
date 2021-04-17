@@ -3,11 +3,13 @@ Linking Number
 
 A C++ class with MATLAB interface for the
 computation of the linking number.
-Given two parametric closed curves :math:`\mathbf{p}(t)`
-and :math:`\mathbf{q}(t)` where
+Given two parametric closed curves **p**(t)
+and **q**(t) where
 
-.. math::
+.. image:: EQ1.png
+    :align: center
 
+..
     \begin{array}{rcl}
       [0,N] & \to & \mathbb{R}^3 \cr
           t & \to & \mathbf{p}(t)
@@ -17,31 +19,37 @@ and :math:`\mathbf{q}(t)` where
       [0,M] & \to & \mathbb{R}^3 \cr
           t & \to & \mathbf{q}(t)
     \end{array}
+..
 
-and :math:`\mathbf{p}(0)=\mathbf{p}(N)`, :math:`\mathbf{q}(0)=\mathbf{q}(M)`.
-The linking number :math:`L(\mathbf{p},\mathbf{q})` of the two curve  :math:`\mathbf{p}(t)`
-and :math:`\mathbf{q}(t)` is defined as the double integral
+and **p**(0)=**p**(N), **q**(0)=**q**(M).
+The linking number L(**p**,**q**)
+of the two curve **q**(t) and **q**(t)
+is defined as the double integral
 
-.. math::
+.. image:: EQ2.png
+    :align: center
 
+..
     L(\mathbf{p},\mathbf{q})= \frac{1}{4\pi}
     \int_{0}^N
     \int_{0}^M
     \frac{(\mathbf{q}(s)-\mathbf{p}(t))\dot(\mathbf{q}'(s)\times\mathbf{p}'(t))}
          {||\mathbf{q}(s)-\mathbf{p}(t)||^3}
     \mathrm{d}s\mathrm{d}t\,.
+..
 
 which can be proved its an integer (if the curve do not intersect).
 
 The library can compute the linking number of two piecewise linear curves
 where the curves are defined by the support points
 
-.. math::
+.. image:: EQ3.png
 
+..
     \{\mathbf{p}_0,\mathbf{p}_1,\ldots,\mathbf{p}_N\}
     \qquad
     \{\mathbf{q}_0,\mathbf{q}_1,\ldots,\mathbf{q}_M\}
-
+..
 
 C++ interface
 -------------
@@ -137,7 +145,7 @@ two vecotor or two matrices ``n x 3`` as follows
 
 Having loaded ``m`` curves it is possible to
 compute directly a matrix of linking number
-where :math:`M_{ij}` is the linking number
+where Mij is the linking number
 of the i-th curve vs j-th curve.
 For example
 
@@ -214,7 +222,7 @@ paper here listed
 
 - **Ana Alonso Rodríguez, Enrico Bertolazzi, Riccardo Ghiloni, Ruben Specogna**,
   *Efficient construction of 2-chains representing a basis of*
-  :math:`H_2(\Omega^-,\partial\Omega;\mathbb{Z})`,
+  |EQ4|,
   Advances in Computational Mathematics, vol.44, n.5, 2018
 
 - **Ana Alonso Rodríguez, Enrico Bertolazzi, Riccardo Ghiloni, Ruben Specogna**,
@@ -229,3 +237,5 @@ paper here listed
   *Construction of a finite element basis of the first de Rham cohomology group
   and numerical solution of 3D magnetostatic problems*,
   SIAM Journal on Numerical Analysis, vol.51, N.4, 2013
+
+  .. |EQ4| image:: EQ4.png
