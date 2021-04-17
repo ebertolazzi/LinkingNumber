@@ -17,7 +17,7 @@ function test
     hold on ;
     Q = [ x'; y'; z' ] ;
   
-    [W,E] = Writhe( Q ) ;
+    [W,E] = writhe( Q ) ;
     fprintf('W = %g, err = %g\n', W, E ) ;
     
     data = [ data, W ] ;

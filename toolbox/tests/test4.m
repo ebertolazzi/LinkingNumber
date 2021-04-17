@@ -1,6 +1,6 @@
 clear all ;
 
-t=[0:0.05:1000000];
+t=[0:0.05:10000];
 x=cos(2*pi*t);
 y=sin(2*pi*t);
 z=t/t(end);
