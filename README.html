@@ -1,0 +1,165 @@
+<h1 id="linking-number">Linking Number</h1>
+<p>A C++ class with MATLAB interface for the computation of the linking number. Given two parametric closed curves <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathbf%7Bp%7D%28t%29" alt="\mathbf{p}(t)" title="\mathbf{p}(t)" class="math inline"> and <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathbf%7Bq%7D%28t%29" alt="\mathbf{q}(t)" title="\mathbf{q}(t)" class="math inline"> where</p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20%5Cbegin%7Barray%7D%7Brcl%7D%0A%20%20%5B0%2CN%5D%20%26%20%5Cto%20%26%20%5Cmathbb%7BR%7D%5E3%20%5Ccr%0A%20%20%20%20%20%20t%20%26%20%5Cto%20%26%20%5Cmathbf%7Bp%7D%28t%29%0A%5Cend%7Barray%7D%0A%5Cqquad%0A%5Cbegin%7Barray%7D%7Brcl%7D%0A%20%20%5B0%2CM%5D%20%26%20%5Cto%20%26%20%5Cmathbb%7BR%7D%5E3%20%5Ccr%0A%20%20%20%20%20%20t%20%26%20%5Cto%20%26%20%5Cmathbf%7Bq%7D%28t%29%0A%5Cend%7Barray%7D" alt="\begin{array}{rcl}
+  [0,N] &amp; \to &amp; \mathbb{R}^3 \cr
+      t &amp; \to &amp; \mathbf{p}(t)
+\end{array}
+\qquad
+\begin{array}{rcl}
+  [0,M] &amp; \to &amp; \mathbb{R}^3 \cr
+      t &amp; \to &amp; \mathbf{q}(t)
+\end{array}" title="\begin{array}{rcl}
+  [0,N] &amp; \to &amp; \mathbb{R}^3 \cr
+      t &amp; \to &amp; \mathbf{p}(t)
+\end{array}
+\qquad
+\begin{array}{rcl}
+  [0,M] &amp; \to &amp; \mathbb{R}^3 \cr
+      t &amp; \to &amp; \mathbf{q}(t)
+\end{array}" class="math display"></p>
+<p>and <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathbf%7Bp%7D%280%29%3D%5Cmathbf%7Bp%7D%28N%29" alt="\mathbf{p}(0)=\mathbf{p}(N)" title="\mathbf{p}(0)=\mathbf{p}(N)" class="math inline">, <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathbf%7Bq%7D%280%29%3D%5Cmathbf%7Bq%7D%28M%29" alt="\mathbf{q}(0)=\mathbf{q}(M)" title="\mathbf{q}(0)=\mathbf{q}(M)" class="math inline">. The linking number <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20L%28%5Cmathbf%7Bp%7D%2C%5Cmathbf%7Bq%7D%29" alt="L(\mathbf{p},\mathbf{q})" title="L(\mathbf{p},\mathbf{q})" class="math inline"> of the two curve <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathbf%7Bp%7D%28t%29" alt="\mathbf{p}(t)" title="\mathbf{p}(t)" class="math inline"> and <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cmathbf%7Bq%7D%28t%29" alt="\mathbf{q}(t)" title="\mathbf{q}(t)" class="math inline"> is defined as the double integral</p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20L%28%5Cmathbf%7Bp%7D%2C%5Cmathbf%7Bq%7D%29%3D%20%5Cfrac%7B1%7D%7B4%5Cpi%7D%0A%5Cint_%7B0%7D%5EN%0A%5Cint_%7B0%7D%5EM%0A%5Cfrac%7B%28%5Cmathbf%7Bq%7D%28s%29-%5Cmathbf%7Bp%7D%28t%29%29%5Cdot%28%5Cmathbf%7Bq%7D%27%28s%29%5Ctimes%5Cmathbf%7Bp%7D%27%28t%29%29%7D%0A%20%20%20%20%20%7B%7C%7C%5Cmathbf%7Bq%7D%28s%29-%5Cmathbf%7Bp%7D%28t%29%7C%7C%5E3%7D%0A%5Cmathrm%7Bd%7Ds%5Cmathrm%7Bd%7Dt%5C%2C." alt="L(\mathbf{p},\mathbf{q})= \frac{1}{4\pi}
+\int_{0}^N
+\int_{0}^M
+\frac{(\mathbf{q}(s)-\mathbf{p}(t))\dot(\mathbf{q}&apos;(s)\times\mathbf{p}&apos;(t))}
+     {||\mathbf{q}(s)-\mathbf{p}(t)||^3}
+\mathrm{d}s\mathrm{d}t\,." title="L(\mathbf{p},\mathbf{q})= \frac{1}{4\pi}
+\int_{0}^N
+\int_{0}^M
+\frac{(\mathbf{q}(s)-\mathbf{p}(t))\dot(\mathbf{q}&apos;(s)\times\mathbf{p}&apos;(t))}
+     {||\mathbf{q}(s)-\mathbf{p}(t)||^3}
+\mathrm{d}s\mathrm{d}t\,." class="math display"></p>
+<p>which can be proved its an integer (if the curve do not intersect).</p>
+<p>The library can compute the linking number of two piecewise linear curves where the curves are defined by the support points</p>
+<p><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20%5C%7B%5Cmathbf%7Bp%7D_0%2C%5Cmathbf%7Bp%7D_1%2C%5Cldots%2C%5Cmathbf%7Bp%7D_N%5C%7D%0A%5Cqquad%0A%5C%7B%5Cmathbf%7Bq%7D_0%2C%5Cmathbf%7Bq%7D_1%2C%5Cldots%2C%5Cmathbf%7Bq%7D_M%5C%7D" alt="\{\mathbf{p}_0,\mathbf{p}_1,\ldots,\mathbf{p}_N\}
+\qquad
+\{\mathbf{q}_0,\mathbf{q}_1,\ldots,\mathbf{q}_M\}" title="\{\mathbf{p}_0,\mathbf{p}_1,\ldots,\mathbf{p}_N\}
+\qquad
+\{\mathbf{q}_0,\mathbf{q}_1,\ldots,\mathbf{q}_M\}" class="math display"></p>
+<h2 id="c-interface">C++ interface</h2>
+<p>Load the library</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;linking_number.hh&quot;</span></span></code></pre></div>
+<p>Instantiate the liking number manager:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> max_curve_stored <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>LK_class lk<span class="op">(</span>max_curve_stored<span class="op">);</span></span></code></pre></div>
+<p>the class <code>lk</code> can store more than two curves. Now insert the curves by points, incrementally</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> ncurve<span class="op">=</span><span class="dv">0</span><span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>lk<span class="op">.</span>reset<span class="op">(</span> ncurve <span class="op">);</span> <span class="co">// initialize curve</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>lk<span class="op">.</span>add_point<span class="op">(</span> ncurve<span class="op">,</span> x0<span class="op">,</span> y0<span class="op">,</span> z0 <span class="op">);</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>lk<span class="op">.</span>add_point<span class="op">(</span> ncurve<span class="op">,</span> x1<span class="op">,</span> y1<span class="op">,</span> z1 <span class="op">);</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">// ...</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>lk<span class="op">.</span>add_point<span class="op">(</span> ncurve<span class="op">,</span> xn<span class="op">,</span> yn<span class="op">,</span> zn <span class="op">);</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>lk<span class="op">.</span>close_curve<span class="op">(</span> ncurve <span class="op">);</span></span></code></pre></div>
+<p>and compute linking number</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> ncurve0<span class="op">=</span><span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> ncurve1<span class="op">=</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> lknumber <span class="op">=</span> lk<span class="op">.</span>eval<span class="op">(</span>ncurve0<span class="op">,</span>ncurve1<span class="op">);</span></span></code></pre></div>
+<p>A curve can be inserted by passing all the points stored in a vector</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span>Tvec<span class="op">&gt;</span> a<span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">// ... fill the vector</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>lk<span class="op">.</span>add_curve<span class="op">(</span> ncurve<span class="op">,</span> pnts <span class="op">);</span></span></code></pre></div>
+<p>where <code>Tvec</code> is any structure or class such that the field <code>x</code>, <code>y</code> and <code>z</code> are available. Another possibility is to use a <code>n x 3</code> matrix as follows</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> curve<span class="op">[</span>npts<span class="op">][</span><span class="dv">3</span><span class="op">];</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">// fill the points</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>lk<span class="op">.</span>add_curve<span class="op">(</span> ncurve<span class="op">,</span> curve<span class="op">,</span> npts <span class="op">);</span></span></code></pre></div>
+<p>linking number can be computed in one shot passing two vecotor or two matrices <code>n x 3</code> as follows</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">// mode 1</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span>Tvec<span class="op">&gt;</span> a<span class="op">;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span>Tvec<span class="op">&gt;</span> b<span class="op">;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">// ... fill the vectors</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> lknumber <span class="op">=</span> lk<span class="op">.</span>eval<span class="op">(</span> a<span class="op">,</span> b <span class="op">);</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">// mode 2</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> curve1<span class="op">[</span><span class="dv">10000</span><span class="op">][</span><span class="dv">3</span><span class="op">];</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> curve2<span class="op">[</span><span class="dv">10000</span><span class="op">][</span><span class="dv">3</span><span class="op">];</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> nseg1 <span class="op">=</span> xx<span class="op">;</span> <span class="co">// number of segment of the first curve</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> nseg2 <span class="op">=</span> xx<span class="op">;</span> <span class="co">// number of segment of the second curve</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co">// fill the points</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> lknumber <span class="op">=</span> lk<span class="op">.</span>eval<span class="op">(</span> curve1<span class="op">,</span> nseg<span class="op">,</span> curve2<span class="op">,</span> nseg <span class="op">);</span></span></code></pre></div>
+<p>Having loaded <code>m</code> curves it is possible to compute directly a matrix of linking number where <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20M_%7Bij%7D" alt="M_{ij}" title="M_{ij}" class="math inline"> is the linking number of the i-th curve vs j-th curve. For example</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> i_curve<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">2</span><span class="op">,</span><span class="dv">0</span><span class="op">};</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> j_curve<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">1</span><span class="op">};</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> ni <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> nj <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> mat<span class="op">[</span><span class="dv">6</span><span class="op">];</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>lk<span class="op">.</span>evals<span class="op">(</span> i_curve<span class="op">,</span> ni<span class="op">,</span> j_curve<span class="op">,</span> nj<span class="op">,</span> mat <span class="op">);</span></span></code></pre></div>
+<p>and matrix <code>mat</code> contains (using Fortran addressing <code>mat(i,j) = mat[i+2*j]</code>). the following linking numbers:</p>
+<table style="width:46%;">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 15%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td>L(c2,c0)</td>
+<td>L(c2,c2)</td>
+<td>L(c2,c1)</td>
+</tr>
+<tr class="even">
+<td>L(c0,c0)</td>
+<td>L(c0,c2)</td>
+<td>L(c0,c1)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="matlab-interface">MATLAB interface</h2>
+<p>Matlab usage is very easy, there is a unique command <code>lk</code> with a variable number of arguments <code>lk(p1,p2,...,pn)</code> where <code>pk</code> is a <code>n x 3</code> matrix storing the points of the piecewise linear curve.</p>
+<pre class="text"><code>[L,err] = lk(p1,p2,...,pn);</code></pre>
+<table style="width:99%;">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 83%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td>L</td>
+<td>Linking number matrix</td>
+</tr>
+<tr class="even">
+<td>L(i,j)</td>
+<td>Linking number of curve i vs curve j, L(i,i) = 0</td>
+</tr>
+<tr class="odd">
+<td>err</td>
+<td>linking number error matrix</td>
+</tr>
+<tr class="even">
+<td>err(i,j)</td>
+<td>L(i,j) error, if &lt; 0.5 the L(i,j) is certified</td>
+</tr>
+</tbody>
+</table>
+<h3 id="installation">Installation</h3>
+<p>Download the toolbox from <a href="https://github.com/ebertolazzi/LinkingNumber/releases">here</a> and install as usual. After installation compile the mex interface by running <code>CompileLK</code> on the MATAB command window.</p>
+<h2 id="reference">Reference</h2>
+<p>The algorithm used in the library is detailed in</p>
+<ul>
+<li><strong>Enrico Bertolazzi, Riccardo Ghiloni, Ruben Specogna</strong>, <em>Efficient computation of Linking number with certification</em>, 2019 <a href="https://arxiv.org/abs/1912.13121">link at arxiv</a></li>
+</ul>
+<p>This implementation of linking number was used in a various paper here listed</p>
+<ul>
+<li><strong>Ana Alonso Rodríguez, Enrico Bertolazzi, Alberto Valli</strong>, <em>The curl-div system: theory and finite element approximation</em>, chapter of the book: <em>Maxwell’s Equations: Analysis and Numerics</em>, de Gruyter., 20-19</li>
+<li><strong>Ana Alonso Rodríguez, Enrico Bertolazzi, Riccardo Ghiloni, Ruben Specogna</strong>, <em>Efficient construction of 2-chains representing a basis of</em> <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20H_2%28%5COmega%5E-%2C%5Cpartial%5COmega%3B%5Cmathbb%7BZ%7D%29" alt="H_2(\Omega^-,\partial\Omega;\mathbb{Z})" title="H_2(\Omega^-,\partial\Omega;\mathbb{Z})" class="math inline">, Advances in Computational Mathematics, vol.44, n.5, 2018</li>
+<li><strong>Ana Alonso Rodríguez, Enrico Bertolazzi, Riccardo Ghiloni, Ruben Specogna</strong>, <em>Efficient construction of 2-chains with a prescribed boundary</em>, SIAM Journal on Numerical Analysis, vol.55, n.3, 2017</li>
+<li><strong>Ana Alonso Rodriguez, Enrico Bertolazzi, Riccardo Ghiloni, Alberto Valli</strong>, <em>Finite element simulation of eddy current problems using magnetic scalar potentials</em>, Journal of Computational Physics, vol. 294, 2015</li>
+<li><strong>Ana Alonso Rodríguez, Enrico Bertolazzi, Riccardo Ghiloni, Alberto Valli</strong>, <em>Construction of a finite element basis of the first de Rham cohomology group and numerical solution of 3D magnetostatic problems</em>, SIAM Journal on Numerical Analysis, vol.51, N.4, 2013</li>
+</ul>
