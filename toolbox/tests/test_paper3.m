@@ -26,7 +26,7 @@ function test
 
     fprintf('L = %d, err = %g\n', L, E ) ;
     
-    [W,E] = writhe( Q );
+    [W,E] = Writhe( Q );
     fprintf('W = %g, err = %g\n', W, E ) ;
 
     title(sprintf('LK = %d',L));

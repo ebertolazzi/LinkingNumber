@@ -4,3 +4,7 @@ LinkingNumber.xcodeproj
 *.mltbx
 t1
 t2
+.idea
+bin
+build
+cmake-build-debug

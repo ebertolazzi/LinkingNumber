@@ -1,40 +1,30 @@
 clc;
 clear functions;
-[~,mexLoaded] = inmem('-completenames');
 
 old_dir = cd(fileparts(which(mfilename)));
 
-NAMES = {
-  'lk', ...
-  'writhe', ...
-};
+NAMES = { 'lk', 'Writhe' };
 
-LIB_NAMES = { ...
-  'linking_number.cc', ...
-};
+lst_cc = dir('src/*.cc');
+
+name_list   = {lst_cc.name};
+folder_list = {lst_cc.folder};
 
 MROOT = matlabroot;
+DEFS  = ' ';
 
-CMDBASE = 'mex -c -largeArrayDims -Isrc -Isrc/Utils ';
+CMDBASE = [ 'mex -c -largeArrayDims -Isrc -Isrc_lib -Isrc/Utils ', DEFS];
 if isunix
   CMDBASE = [CMDBASE, 'CXXFLAGS="\$CXXFLAGS -Wall -O2 -g" '];
 elseif ispc
+  CMDBASE = [CMDBASE, 'COMPFLAGS="\$COMPFLAGS -O2" '];
 end
 
-%for k=1:length(NAMES)
-%  N=NAMES{k};
-%  disp('---------------------------------------------------------');
-%  fprintf(1,'Compiling: %s\n',N)
-%  CMD = [CMDBASE ' -c src_mex/mex_' N '.cc' ];
-%  disp('---------------------------------------------------------');
-%  disp(CMD);
-%  eval(CMD);
-%end
-
 LIB_OBJS = '';
-for k=1:length(LIB_NAMES)
-  [filepath,bname,ext] = fileparts(LIB_NAMES{k});
-  NAME = [' src/', filepath, '/', bname, ext ];
+for k=1:length(name_list)
+  [~,dname,~] = fileparts(folder_list{k});
+  [~,bname,~] = fileparts(name_list{k});
+  NAME        = [dname, '/', name_list{k} ];
   if isunix
     LIB_OBJS = [ LIB_OBJS, bname, '.o ' ];
   elseif ispc
@@ -54,7 +44,7 @@ for k=1:length(NAMES)
   CMD = [ 'while mislocked(''' N '''); munlock(''' N '''); end;'];
   eval(CMD);
 
-  CMD = [ 'mex -Isrc -output bin/', N ];
+  CMD = [ 'mex ', DEFS, ' -Isrc -Isrc_lib -output bin/', N ];
   CMD = [ CMD, ' -largeArrayDims src_mex/mex_', N ];
   CMD = [ CMD, '.cc ', LIB_OBJS ];
 
@@ -72,6 +62,7 @@ for k=1:length(NAMES)
       ' LINKLIBS="-ldl -L\$MATLABROOT/bin/\$ARCH -L\$MATLABROOT/extern/bin/\$ARCH -lMatlabDataArray -lmx -lmex -lmat -lm "' ...
     ];
   elseif ispc
+    CMD = [CMD, 'COMPFLAGS="\$COMPFLAGS -O2" '];
   end
 
   disp(CMD);

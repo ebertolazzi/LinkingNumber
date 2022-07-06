@@ -42,6 +42,8 @@ using namespace std;
 
 namespace LK {
 
+  using std::abs;
+
   typedef long double ldouble;
 
   // ------------------------------------------------------------------------
@@ -132,13 +134,13 @@ namespace LK {
   Constants<ldouble>::u_epsi_y = ldouble(20.257)*std::numeric_limits<ldouble>::epsilon();
 
   template <> unsigned long const
-  Constants<float>::I_max = (unsigned long)(1.570796327/std::numeric_limits<float>::epsilon());
+  Constants<float>::I_max = float(1.570796327)/std::numeric_limits<float>::epsilon();
 
   template <> unsigned long const
-  Constants<double>::I_max = (unsigned long)(1.570796327/std::numeric_limits<double>::epsilon());
+  Constants<double>::I_max = double(1.570796327)/std::numeric_limits<double>::epsilon();
 
   template <> unsigned long const
-  Constants<ldouble>::I_max = (unsigned long)(1.570796327/std::numeric_limits<ldouble>::epsilon());
+  Constants<ldouble>::I_max =ldouble(1.570796327)/std::numeric_limits<ldouble>::epsilon();
 
   // ------------------------------------------------------------------------
 
@@ -268,7 +270,11 @@ namespace LK {
       "Angle::build, segments too close!\nR1 = " << R1 << " R2 = " << R2
     );
 
-    e = real_type(2.829 + (57.516/R1+57.516/R2));
+    {
+      real_type c1 = real_type(2.829);
+      real_type c2 = real_type(57.516);
+      e = c1 + (c2/ R1 + c2/R2);
+    }
 
   }
 
@@ -297,7 +303,8 @@ namespace LK {
     // scale to avoid overflow
     scale(nx,ny);
 
-    real_type E = real_type(R+rhs.R+2.829);
+    real_type c1 = real_type(2.829);
+    real_type E  = real_type(R+rhs.R+c1);
 
     I += rhs.I + static_cast<unsigned long>(std::floor(E));
     R  = E-std::floor(E);
@@ -327,7 +334,8 @@ namespace LK {
     // scale to avoid overflow
     scale(nx,ny);
 
-    real_type E = real_type(R+rhs.R+2.829);
+    real_type c1 = real_type(2.829);
+    real_type E  = real_type(R+rhs.R+c1);
 
     I += rhs.I + static_cast<unsigned long>(std::floor(E));
     R  = E-std::floor(E);
@@ -357,7 +365,8 @@ namespace LK {
     // va riscalato per evitare overflow
     scale(nx,ny);
 
-    real_type E = real_type(2.829+rhs.e+R);
+    real_type c1 = real_type(2.829);
+    real_type E  = real_type(c1+rhs.e+R);
     I += static_cast<unsigned long>(std::floor(E));
     R = E-std::floor(E);
     X = nx;
@@ -386,7 +395,8 @@ namespace LK {
     // va riscalato per evitare overflow
     scale(nx,ny);
       
-    real_type E = real_type(2.829+rhs.e+R);
+    real_type c1 = real_type(2.829);
+    real_type E  = real_type(c1+rhs.e+R);
     I += static_cast<unsigned long>(std::floor(E));
     R = E-std::floor(E);
     X = nx;
@@ -405,7 +415,7 @@ namespace LK {
     real_type angle = atan2( Y, X );
     real_type err   = getError();
     LK_ASSERT(
-      std::abs(angle) <= err*m_pi/2,
+      abs(angle) <= err*m_pi/2,
       "BigAngle::checkSigma()\nangle = " << angle <<
       "\nerror = " << err <<
       "\nX = " << X <<
@@ -626,7 +636,7 @@ namespace LK {
     BigAngle<T> & out_angle
   ) const {
     out_angle.init();
-    for ( int_type i = istart; i < curveA.size(); i += nstep ) {
+    for ( int_type i = istart; i < int_type(curveA.size()); i += nstep ) {
       Segment const & S = curveA[i];
       int_type w = S.weight;
       if ( w != 0 ) {
@@ -646,7 +656,7 @@ namespace LK {
     int_type  lk;
     real_type fraction;
     evaluate( i_curve, j_curve, lk, fraction );
-    LK_ASSERT( std::abs(fraction) < 0.5, "eval(...)\nerr = " << fraction );
+    LK_ASSERT( abs(fraction) < real_type(0.5), "eval(...)\nerr = " << fraction );
     return lk;
   }
 
@@ -785,7 +795,7 @@ namespace LK {
     out_angle.init();
     for ( typename CURVE::const_iterator iQ = curve.begin();
           iQ != curve.end(); ++iQ ) {
-      if ( std::abs( (iQ-curve.begin()) - i_skip ) < 2 ) continue;
+      if ( abs( (iQ-curve.begin()) - i_skip ) < 2 ) continue;
       int_type w = iQ->weight;
       if ( w == 0 ) continue;
       angle.build( P1, P2, iQ->P1, iQ->P2 );
@@ -805,7 +815,7 @@ namespace LK {
     BigAngle<T> & out_angle
   ) const {
     out_angle.init();
-    for ( int_type i = istart; i < curve.size(); i += nstep ) {
+    for ( int_type i = istart; i < int_type(curve.size()); i += nstep ) {
       Segment const & S = curve[i];
       int_type w = S.weight;
       if ( w != 0 ) {
