@@ -27,7 +27,7 @@ $$
     L(\mathbf{p},\mathbf{q})= \frac{1}{4\pi}
     \int_{0}^N
     \int_{0}^M
-    \frac{(\mathbf{q}(s)-\mathbf{p}(t))\dot(\mathbf{q}'(s)\times\mathbf{p}'(t))}
+    \frac{(\mathbf{q}(s)-\mathbf{p}(t))\cdot(\mathbf{q}'(s)\times\mathbf{p}'(t))}
          {||\mathbf{q}(s)-\mathbf{p}(t)||^3}
     \mathrm{d}s\mathrm{d}t
 $$
